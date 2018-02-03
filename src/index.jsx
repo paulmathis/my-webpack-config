@@ -16,8 +16,10 @@ render(App);
 
 // Webpack Hot Module Replacement API
 if (module.hot) {
+  // Skip reloading index
+  module.hot.decline('./index.jsx');
   module.hot.accept('./App', () => {
     const NextApp = require('./App').default;
-    render(App);
+    render(NextApp);
   });
 }
