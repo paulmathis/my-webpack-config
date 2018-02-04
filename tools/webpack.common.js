@@ -11,7 +11,7 @@ const extractSass = new ExtractTextPlugin({
 });
 
 module.exports = {
-  entry: { app: ['./src/index.jsx'] },
+  entry: { app: [paths.appIndex] },
   plugins: [
     new CleanWebpackPlugin(['dist'], {
       root: paths.appDirectory
