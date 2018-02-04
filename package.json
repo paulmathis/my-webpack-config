@@ -1,14 +1,12 @@
 {
   "name": "my-webpack-config",
   "version": "1.0.0",
-  "description":
-    "Basic Webpack Config with React, Hot Module Reloading, and an Express Server",
+  "description": "Basic Webpack Config with React, Hot Module Reloading, and an Express Server",
   "main": "webpack.config.js",
   "scripts": {
     "watch": "webpack --watch",
     "start": "cross-env NODE_ENV=development node server.js",
-    "build":
-      "cross-env NODE_ENV=production webpack --config ./tools/webpack.prod.js"
+    "build": "cross-env NODE_ENV=production webpack --config ./tools/webpack.prod.js"
   },
   "keywords": [],
   "author": "",

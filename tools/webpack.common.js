@@ -2,16 +2,20 @@ const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const paths = require('./paths');
 
+// Use to turn .scss modules into a .css file for production
 const extractSass = new ExtractTextPlugin({
   filename: '[name].[contenthash].css',
   disable: process.env.NODE_ENV === 'development'
 });
 
 module.exports = {
-  entry: ['./src/index.jsx'],
+  entry: { app: ['./src/index.jsx'] },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['dist'], {
+      root: paths.appDirectory
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html'
     }),
@@ -19,7 +23,7 @@ module.exports = {
   ],
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, '../dist'),
+    path: paths.appBuild,
     publicPath: '/'
   },
   module: {
@@ -29,6 +33,7 @@ module.exports = {
         use: extractSass.extract({
           use: [
             {
+              // Setup for CSS Modules
               loader: 'css-loader',
               options: {
                 modules: true,
@@ -38,12 +43,14 @@ module.exports = {
               }
             },
             {
+              // Transpile .scss to .css
               loader: 'sass-loader',
               options: {
                 sourceMap: true
               }
             },
             {
+              // Sends through PostCSS, view postcss.config.js for list of actions applied
               loader: 'postcss-loader',
               options: {
                 config: {
@@ -57,6 +64,7 @@ module.exports = {
         })
       },
       {
+        // Typescript Loader
         test: /\.(js|jsx|ts|tsx)?$/,
         use: 'ts-loader',
         exclude: /node_modules/
