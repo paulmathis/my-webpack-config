@@ -13,11 +13,11 @@ const extractSass = new ExtractTextPlugin({
 module.exports = {
   entry: { app: [paths.appIndex] },
   plugins: [
-    new CleanWebpackPlugin(['dist'], {
+    new CleanWebpackPlugin([paths.appBuild], {
       root: paths.appDirectory
     }),
     new HtmlWebpackPlugin({
-      template: 'index.html'
+      template: paths.appHtml
     }),
     extractSass
   ],
@@ -54,7 +54,7 @@ module.exports = {
               loader: 'postcss-loader',
               options: {
                 config: {
-                  path: './tools/postcss.config.js'
+                  path: './config/postcss.config.js'
                 }
               }
             }
