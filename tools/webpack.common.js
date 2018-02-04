@@ -19,7 +19,7 @@ module.exports = {
   ],
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../dist'),
     publicPath: '/'
   },
   module: {
@@ -31,6 +31,9 @@ module.exports = {
             {
               loader: 'css-loader',
               options: {
+                modules: true,
+                importLoaders: 1,
+                localIdentName: '[name]__[local]___[hash:base64:5]',
                 sourceMap: true
               }
             },
@@ -38,6 +41,14 @@ module.exports = {
               loader: 'sass-loader',
               options: {
                 sourceMap: true
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                config: {
+                  path: './tools/postcss.config.js'
+                }
               }
             }
           ],
