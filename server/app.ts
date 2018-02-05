@@ -3,17 +3,17 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as fs from 'fs';
 import * as logger from 'morgan';
-// FIXME: Opn import not working properly
-// import opn from 'opn';
+import opn = require('opn');
 import * as path from 'path';
 // import * as favicon from 'serve-favicon';
 import * as webpack from 'webpack';
 import * as webpackDevMiddleWare from 'webpack-dev-middleware';
 import * as webpackHotMiddleware from 'webpack-hot-middleware';
 
+import * as paths from '../config/paths';
 import * as config from '../config/webpack.dev.js';
-// import * as index from './routes/index';
 import * as users from './routes/users';
+// import * as index from './routes/index';
 
 const app = express();
 
@@ -23,7 +23,7 @@ function isDev() {
 }
 
 // If theres no build hasn't been run kill the process and it's not developtment.
-if (!fs.existsSync(path.join(__dirname, 'build')) && !isDev()) {
+if (!fs.existsSync(paths.appBuild) && !isDev()) {
   console.log('App needs to be built first. Run "npm run build"');
   process.exit();
 }
@@ -55,9 +55,9 @@ if (isDev()) {
   app.use(webpackHotMiddleware(compiler));
 
   // launch browser
-  // opn(`http://localhost:${process.env.PORT || '3000'}`);
+  opn(`http://localhost:${process.env.PORT || '3000'}`);
 } else {
-  app.use(express.static(path.join(__dirname, 'build')));
+  app.use(express.static(paths.appBuild));
 }
 
 // app.use('/', index);
@@ -70,22 +70,19 @@ app.use((req, res, next) => {
   next(err);
 });
 
-// error handler
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+// function test(a, b) {
+//   console.log(a, b);
+// }
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-  }
-);
+// error handler
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
 module.exports = app;
