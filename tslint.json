@@ -4,7 +4,9 @@
   "jsRules": {},
   "rules": {
     "no-console": { "severity": "warn" },
-    "no-var-requires": false
+    "no-var-requires": false,
+    "member-access": false,
+    "ordered-imports": false
   },
   "rulesDirectory": []
 }

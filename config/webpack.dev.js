@@ -11,7 +11,7 @@ module.exports = merge(
       contentBase: paths.appBuild,
       hot: true
     },
-    plugins: [new webpack.HotModuleReplacementPlugin()]
+    plugins: [new webpack.NamedModulesPlugin(), new webpack.HotModuleReplacementPlugin()]
   },
   common
 );

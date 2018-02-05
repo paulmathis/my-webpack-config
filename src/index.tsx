@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import App from './Components/App';
+import App from './App';
 
 // TODO: replace any type
 const render = (Component: any) => {
@@ -19,8 +19,8 @@ render(App);
 if (module.hot) {
   // Skip reloading index
   module.hot.decline('./index.tsx');
-  module.hot.accept('./Components/App', () => {
-    const NextApp = require('./Components/App').default;
+  module.hot.accept('./App', () => {
+    const NextApp = require('./App').default;
     render(NextApp);
   });
 }

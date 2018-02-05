@@ -1,17 +1,16 @@
-// import * as bodyParser from 'body-parser';
-import bodyParser = require('body-parser');
-import cookieParser = require('cookie-parser');
-import express = require('express');
-import logger = require('morgan');
+import * as bodyParser from 'body-parser';
+import * as history from 'connect-history-api-fallback';
+import * as cookieParser from 'cookie-parser';
+import * as express from 'express';
+import * as logger from 'morgan';
 import opn = require('opn');
-import path = require('path');
-// import favicon = require('serve-favicon');
-import webpack = require('webpack');
-import webpackDevMiddleWare = require('webpack-dev-middleware');
-import webpackHotMiddleware = require('webpack-hot-middleware');
+import * as path from 'path';
+// import * as  favicon from 'serve-favicon';
+import * as webpack from 'webpack';
+import * as webpackDevMiddleWare from 'webpack-dev-middleware';
+import * as webpackHotMiddleware from 'webpack-hot-middleware';
 
-import users = require('./routes/users');
-// import * as index from './routes/index';
+import api from './routes/api';
 
 const app = express();
 
@@ -31,12 +30,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Webpack and HMR injected during development
-// Otherwise serve static content from build proccess
+// Router setup
+app.use('/api', api);
+
+// Dev/Prod Check. Webpack & HMR Injected if developing, otherwise will serve generated static assets
 if (isDev()) {
   const config = require('../config/webpack.dev.js');
   const compiler = webpack(config);
 
+  app.use(history());
   // Tell express to use the webpack-dev-middleware and use the webpack.dev.js
   // configuration file as a base.
   app.use(
@@ -51,10 +53,10 @@ if (isDev()) {
   opn(`http://localhost:${process.env.PORT || '3000'}`);
 } else {
   app.use(express.static(path.join(__dirname, 'public')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+  });
 }
-
-// app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -74,4 +76,4 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   res.render('error');
 });
 
-module.exports = app;
+export = app;
