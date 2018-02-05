@@ -6,7 +6,7 @@
   "scripts": {
     "gulp-build": "gulp",
     "webpack-build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js",
-    "start": "node ./build/bin/www",
+    "start": "node ./bin/www",
     "watch": "webpack --watch",
     "dev": "cross-env NODE_ENV=development nodemon",
     "build": " npm run webpack-build && npm run gulp-build"
@@ -57,9 +57,9 @@
     "cookie-parser": "^1.4.3",
     "debug": "^3.1.0",
     "express": "^4.16.2",
-    "jade": "^1.11.0",
     "morgan": "^1.9.0",
     "opn": "^5.2.0",
+    "pug": "^2.0.0-rc.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-hot-loader": "^3.1.3",
