@@ -4,11 +4,12 @@
   "description": "Basic Webpack Config with React, Hot Module Reloading, and an Express Server",
   "main": "webpack.config.js",
   "scripts": {
-    "gulp": "gulp",
-    "start": "node ./bin/www",
+    "gulp-build": "gulp",
+    "webpack-build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js",
+    "start": "node ./build/bin/www",
     "watch": "webpack --watch",
     "dev": "cross-env NODE_ENV=development nodemon",
-    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js"
+    "build": " npm run webpack-build && npm run gulp-build"
   },
   "keywords": [],
   "author": "",

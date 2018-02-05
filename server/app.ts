@@ -1,18 +1,16 @@
-import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
-import * as fs from 'fs';
-import * as logger from 'morgan';
+// import * as bodyParser from 'body-parser';
+import bodyParser = require('body-parser');
+import cookieParser = require('cookie-parser');
+import express = require('express');
+import logger = require('morgan');
 import opn = require('opn');
-import * as path from 'path';
-// import * as favicon from 'serve-favicon';
-import * as webpack from 'webpack';
-import * as webpackDevMiddleWare from 'webpack-dev-middleware';
-import * as webpackHotMiddleware from 'webpack-hot-middleware';
+import path = require('path');
+// import favicon = require('serve-favicon');
+import webpack = require('webpack');
+import webpackDevMiddleWare = require('webpack-dev-middleware');
+import webpackHotMiddleware = require('webpack-hot-middleware');
 
-import * as paths from '../config/paths';
-import * as config from '../config/webpack.dev.js';
-import * as users from './routes/users';
+import users = require('./routes/users');
 // import * as index from './routes/index';
 
 const app = express();
@@ -20,12 +18,6 @@ const app = express();
 // Check if running in development
 function isDev() {
   return process.env.NODE_ENV === 'development';
-}
-
-// If theres no build hasn't been run kill the process and it's not developtment.
-if (!fs.existsSync(paths.appBuild) && !isDev()) {
-  console.log('App needs to be built first. Run "npm run build"');
-  process.exit();
 }
 
 // view engine setup
@@ -42,6 +34,7 @@ app.use(cookieParser());
 // Webpack and HMR injected during development
 // Otherwise serve static content from build proccess
 if (isDev()) {
+  const config = require('../config/webpack.dev.js');
   const compiler = webpack(config);
 
   // Tell express to use the webpack-dev-middleware and use the webpack.dev.js
@@ -57,7 +50,7 @@ if (isDev()) {
   // launch browser
   opn(`http://localhost:${process.env.PORT || '3000'}`);
 } else {
-  app.use(express.static(paths.appBuild));
+  app.use(express.static(path.join(__dirname, 'public')));
 }
 
 // app.use('/', index);
@@ -69,10 +62,6 @@ app.use((req, res, next) => {
   err.status = 404;
   next(err);
 });
-
-// function test(a, b) {
-//   console.log(a, b);
-// }
 
 // error handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

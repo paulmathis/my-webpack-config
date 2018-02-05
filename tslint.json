@@ -1,14 +1,10 @@
 {
   "defaultSeverity": "error",
-  "extends": [
-    "tslint:latest",
-    "tslint-react",
-    "tslint-eslint-rules",
-    "tslint-config-prettier"
-  ],
+  "extends": ["tslint:latest", "tslint-react", "tslint-eslint-rules", "tslint-config-prettier"],
   "jsRules": {},
   "rules": {
-    "no-console": { "severity": "warn" }
+    "no-console": { "severity": "warn" },
+    "no-var-requires": false
   },
   "rulesDirectory": []
 }
