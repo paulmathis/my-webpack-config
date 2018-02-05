@@ -3,7 +3,8 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as fs from 'fs';
 import * as logger from 'morgan';
-import opn = require('opn');
+// FIXME: Opn import not working properly
+// import opn from 'opn';
 import * as path from 'path';
 // import * as favicon from 'serve-favicon';
 import * as webpack from 'webpack';
@@ -54,7 +55,7 @@ if (isDev()) {
   app.use(webpackHotMiddleware(compiler));
 
   // launch browser
-  opn(`http://localhost:${process.env.PORT || '3000'}`);
+  // opn(`http://localhost:${process.env.PORT || '3000'}`);
 } else {
   app.use(express.static(path.join(__dirname, 'build')));
 }

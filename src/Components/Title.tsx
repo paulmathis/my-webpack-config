@@ -5,7 +5,7 @@ const Title = () => {
   return (
     <div className={s.wrapper}>
       <h1>Sample Component</h1>
-      <p>Yep</p>
+      <p>Yeps</p>
     </div>
   );
 };
