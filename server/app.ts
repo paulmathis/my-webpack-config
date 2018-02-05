@@ -1,15 +1,20 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-const fs = require('fs');
+import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
+import * as express from 'express';
+import * as fs from 'fs';
+import * as logger from 'morgan';
+import opn = require('opn');
+import * as path from 'path';
+// import * as favicon from 'serve-favicon';
+import * as webpack from 'webpack';
+import * as webpackDevMiddleWare from 'webpack-dev-middleware';
+import * as webpackHotMiddleware from 'webpack-hot-middleware';
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+import * as config from '../config/webpack.dev.js';
+// import * as index from './routes/index';
+import * as users from './routes/users';
 
-var app = express();
+const app = express();
 
 // Check if running in development
 function isDev() {
@@ -27,7 +32,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,10 +41,6 @@ app.use(cookieParser());
 // Webpack and HMR injected during development
 // Otherwise serve static content from build proccess
 if (isDev()) {
-  const webpack = require('webpack');
-  const opn = require('opn');
-  const webpackDevMiddleWare = require('webpack-dev-middleware');
-  const config = require('./config/webpack.dev.js');
   const compiler = webpack(config);
 
   // Tell express to use the webpack-dev-middleware and use the webpack.dev.js
@@ -50,7 +51,7 @@ if (isDev()) {
     })
   );
 
-  app.use(require('webpack-hot-middleware')(compiler));
+  app.use(webpackHotMiddleware(compiler));
 
   // launch browser
   opn(`http://localhost:${process.env.PORT || '3000'}`);
@@ -62,21 +63,28 @@ if (isDev()) {
 app.use('/users', users);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+app.use((req, res, next) => {
+  const err: any = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+  }
+);
 
 module.exports = app;
